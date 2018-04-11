@@ -80,3 +80,7 @@ enum CellStyle {
     case textInput
     case array
 }
+
+protocol CellDelegate: class {
+    func handleInput(value1: String, value2: String?, operation: LearningOperation)
+}

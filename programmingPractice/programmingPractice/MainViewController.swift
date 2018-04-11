@@ -8,14 +8,6 @@
 
 import UIKit
 
-protocol CellDelegate {
-//  func helloName(value: String)
-    func handleInput(value1: String, value2: String?, operation: LearningOperation)
-//    func handle1Value(value: String, index: Int)
-//    func handle2Values(value1: String, value2: String, index: Int)
-//    func handleArray(array: [Int], index: Int)
-}
-
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let label = UILabel()
@@ -89,7 +81,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return LearningOperation.count
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,23 +88,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-            
-        case 1:
-            return "Addition "
-        case 2:
-            return "Multiplication "
-        case 3:
-            return "Count To: "
-        case 4:
-            return"Factorial of: "
-        case 5:
-            return"Even numbers in: "
-        case 6:
-            return"Largest number in: "
-        default:
-            return "Hello 'Name' "
-        }
+        return LearningOperation(rawValue: section)?.sectionTitle
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -141,6 +116,27 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         return cell
     }
+    
+    func stringToArrayOfInt(string: String) -> [Int] {
+        var numbers = [Int]()
+        var temp = ""
+        for char in string {
+            let strChar:String = "\(char)"
+            switch strChar {
+            case ",", ".", " " :
+                guard let number = Int(temp) else {continue}
+                numbers.append(number)
+                temp = ""
+            default:
+                temp += strChar
+            }
+            if char == string.last {
+                guard let number = Int(temp) else {continue}
+                numbers.append(number)
+            }
+        }
+        return numbers
+    }
 }
 
 extension MainViewController: CellDelegate {
@@ -148,127 +144,51 @@ extension MainViewController: CellDelegate {
         
         switch operation {
         case .helloWorld:
-            helloName(value: value1)
+            if value1 == "" {
+                label.text = "Hello World"
+            } else {
+                label.text = "Hello \(value1)"
+            }
         case .addition:
-            handle2Values(value1: value1, value2: value2!, operation: operation)
+            if let v1 = Int(value1), let value2 = value2, let v2 = Int(value2) {
+                label.text = addition(value1: v1, value2: v2)
+            } else {
+                label.text = "Invalid Number"
+            }
         case .multiplication:
-            handle2Values(value1: value1, value2: value2!, operation: operation)
+            if let v1 = Int(value1), let value2 = value2, let v2 = Int(value2) {
+                label.text = multiply(value1: v1, value2: v2)
+            } else {
+                label.text = "Invalid Number"
+            }
         case .counting:
-            handle1Value(value: value1, operation: operation)
+            if let v1 = Double(value1) {
+                label.text = countToV1(value: Int(v1))
+            } else {
+                label.text = "Invalid number"
+            }
         case.factorial:
-            handle1Value(value: value1, operation: operation)
+            if let v1 = Double(value1) {
+                label.text = factorialOf(value: v1)
+            } else {
+                label.text = "Invalid number"
+            }
         case .evenNumbers:
-            let array = stringToArray(string: value1)
-            handleArray(array: array, operation: operation)
+            let array = stringToArrayOfInt(string: value1)
+                if array.count == 0 {
+                    label.text = "No numbers input or invalid input"
+                } else {
+                    label.text = returnEvenNumbers(array: array)
+                }
         case .largestNumber:
-            let array = stringToArray(string: value1)
-            handleArray(array: array, operation: operation)
-        }
-    }
-    
-    func stringToArray(string: String) -> [Int] {
-        
-        var numbers = [Int]()
-        var temp = ""
-        
-        for char in string {
-            
-            let strChar:String = "\(char)"
-            switch strChar {
-                
-            case ",", ".", " " :
-                
-                guard let number = Int(temp) else {continue}
-                numbers.append(number)
-                temp = ""
-            default:
-                temp += strChar
-            }
-            
-            if char == string.last {
-                guard let number = Int(temp) else {continue}
-                numbers.append(number)
+            let array = stringToArrayOfInt(string: value1)
+            if array.count == 0 {
+                label.text = "No numbers input or invalid input"
+            } else {
+                label.text = returnLargestNumber(array: array)
             }
         }
-        
-        return numbers
     }
-    
-    
-    func helloName(value: String) {
-        
-        if value == "" {
-            label.text = "Hello World"
-        } else {
-            label.text = "Hello \(value)"
-        }
-    }
-    
-    func handle1Value(value: String, operation: LearningOperation) {
-        
-        if let number = Double(value) {
-            
-            var result = ""
-            switch operation {
-                
-            case .counting:
-                result = countToV1(value: Int(number))
-            case .factorial:
-                result = factorialOf(value: number)
-            default:
-                result = "error"
-            }
-            label.text = result
-            
-        } else {
-            
-            label.text = "Invalid number"
-        }
-    }
-    
-    func handle2Values(value1: String, value2: String, operation: LearningOperation) {
-        
-        if let v1 = Int(value1), let v2 = Int(value2) {
-            
-            var result = ""
-            switch operation {
-                
-            case .addition:
-                result = addition(value1: v1, value2: v2)
-            case .multiplication:
-                result = multiply(value1: v1, value2: v2)
-            default:
-                result = "error"
-            }
-            label.text = result
-            
-        } else {
-            
-            label.text = "Invalid Number"
-        }
-    }
-    
-    func handleArray(array: [Int], operation: LearningOperation) {
-        
-        if array.count == 0 {
-            label.text = "No numbers input"
-        } else {
-            var result = ""
-            switch operation {
-                
-            case .evenNumbers:
-                result = returnEvenNumbers(array: array)
-            case .largestNumber:
-                result = returnLargestNumber(array: array)
-            default:
-                result = "error"
-            }
-            label.text = result
-        }
-    }
-    
-    
-    
 }
 
 enum LearningOperation: Int {
@@ -279,6 +199,25 @@ enum LearningOperation: Int {
     case factorial
     case evenNumbers
     case largestNumber
+    
+    var sectionTitle: String {
+        switch self {
+        case .helloWorld:
+            return "Hello World"
+        case .addition:
+            return "Addition "
+        case .multiplication:
+            return "Multiplication "
+        case .counting:
+            return "Count To: "
+        case .factorial:
+            return"Factorial of: "
+        case .evenNumbers:
+            return"Even numbers in: "
+        case .largestNumber:
+            return"Largest number in: "
+        }
+    }
     
     static var count: Int = 7
 }

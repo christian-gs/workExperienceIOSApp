@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 func addition(value1: Int, value2: Int) -> String {
 
     let result = value1 + value2
