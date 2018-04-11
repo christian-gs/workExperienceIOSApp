@@ -24,6 +24,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
+        tableView.tableFooterView = UIView()
         
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -58,18 +59,13 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     var keyboardHeight: CGFloat = 0.0
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
-        
-        guard !(self.keyIsBoardVisible) else {return}
         guard let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
         self.keyboardHeight = keyboardFrame.cgRectValue.height
-        
         tableView.contentOffset.y += keyboardHeight
         self.keyIsBoardVisible = true
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        
-        guard self.keyIsBoardVisible else {return}
         tableView.contentOffset.y -= self.keyboardHeight
         self.keyIsBoardVisible = false
         
