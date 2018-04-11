@@ -8,14 +8,15 @@
 
 import UIKit
 
-class DoubleInputTableViewCell: UITableViewCell {
+class CustomCell: UITableViewCell {
 
     let textField1 = UITextField()
     let label = UILabel()
     let textField2 = UITextField()
     let button = UIButton()
     var delegate: CellDelegate?
-    var index = 0
+    var operation: LearningOperation?
+    var style: CellStyle?
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,7 +31,7 @@ class DoubleInputTableViewCell: UITableViewCell {
         button.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         button.addTarget(self, action: #selector(buttonHandler), for: .touchUpInside)
 
-        for view in [textField1, label, textField2, button] as! [UIView] {
+        for view in [textField1, label, textField2, button] as [UIView] {
 
             view.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(view)
@@ -65,8 +66,17 @@ class DoubleInputTableViewCell: UITableViewCell {
     }
 
     @objc func buttonHandler() {
-
-        delegate?.handle2Values(value1: textField1.text!, value2: textField2.text!, index: self.index)
+        guard textField1.text != nil && operation != nil else {
+            return
+        }
+        delegate?.handleInput(value1: textField1.text!, value2: textField2.text, operation: self.operation!)
     }
 
+}
+
+enum CellStyle {
+    case singleInput
+    case doubleInput
+    case textInput
+    case array
 }
