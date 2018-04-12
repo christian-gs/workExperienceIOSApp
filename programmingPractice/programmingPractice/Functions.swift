@@ -78,3 +78,11 @@ func returnLargestNumber(array: [Int]) -> String {
 
     return "\(result)"
 }
+
+func palindrome(value: String) -> String {
+    if String(value.lowercased().reversed()) == value.lowercased() {
+        return (value + " is a palindrome")
+    } else {
+        return (value + " is not a palindrome")
+    }
+}

@@ -109,6 +109,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.style = CellStyle.array
         case .largestNumber:
             cell.style = CellStyle.array
+        case .palindrome:
+            cell.style = CellStyle.textInput
         }
         return cell
     }
@@ -183,6 +185,8 @@ extension MainViewController: CellDelegate {
             } else {
                 label.text = returnLargestNumber(array: array)
             }
+        case .palindrome:
+                label.text = palindrome(value: value1)
         }
     }
 }
@@ -195,6 +199,7 @@ enum LearningOperation: Int {
     case factorial
     case evenNumbers
     case largestNumber
+    case palindrome
     
     var sectionTitle: String {
         switch self {
@@ -207,13 +212,16 @@ enum LearningOperation: Int {
         case .counting:
             return "Count To: "
         case .factorial:
-            return"Factorial of: "
+            return "Factorial of: "
         case .evenNumbers:
-            return"Even numbers in: "
+            return "Even numbers in: "
         case .largestNumber:
-            return"Largest number in: "
+            return "Largest number in: "
+        case .palindrome:
+            return "Palindrome: "
         }
+        
     }
     
-    static var count: Int = 7
+    static var count: Int = 8
 }
