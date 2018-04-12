@@ -111,3 +111,14 @@ func primeNumberChecker(value: Int) -> String {
     }
 
 }
+
+func linearSearch(value: Int) -> String {
+    let arrayToSearch: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    //count use a ternary here but best not I suppose
+    if arrayToSearch.contains(value) {
+        return("The array contains " + String(value))
+    } else {
+        return("The array does not contain " + String(value))
+    }
+}
