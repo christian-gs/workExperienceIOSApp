@@ -131,7 +131,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 temp += strChar
             }
             if char == string.last {
-                guard let number = Int(temp) else {continue}
+                guard let number = Int(temp) else {break}
                 numbers.append(number)
             }
         }
@@ -150,52 +150,68 @@ extension MainViewController: CellDelegate {
                 label.text = "Hello \(value1)"
             }
         case .addition:
-            if let v1 = Int(value1), let value2 = value2, let v2 = Int(value2) {
-                label.text = addition(value1: v1, value2: v2)
-            } else {
-                label.text = "Invalid Number"
+            if let values = validateInts(v1: value1, v2: value2) {
+                label.text = addition(value1: values.0, value2: values.1)
             }
         case .multiplication:
-            if let v1 = Int(value1), let value2 = value2, let v2 = Int(value2) {
-                label.text = multiply(value1: v1, value2: v2)
-            } else {
-                label.text = "Invalid Number"
+            if let values = validateInts(v1: value1, v2: value2) {
+                label.text = multiply(value1: values.0, value2: values.1)
             }
         case .counting:
-            if let v1 = Double(value1) {
-                label.text = countToV1(value: Int(v1))
-            } else {
-                label.text = "Invalid number"
+            if let v1 = validateInt(v1: value1) {
+                label.text = countToV1(value: v1)
             }
         case.factorial:
-            if let v1 = Double(value1) {
+            if let v1 = validateDouble(v1: value1) {
                 label.text = factorialOf(value: v1)
-            } else {
-                label.text = "Invalid number"
             }
         case .evenNumbers:
-            let array = stringToArrayOfInt(string: value1)
-                if array.count == 0 {
-                    label.text = "No numbers input or invalid input"
-                } else {
-                    label.text = returnEvenNumbers(array: array)
-                }
-        case .largestNumber:
-            let array = stringToArrayOfInt(string: value1)
-            if array.count == 0 {
-                label.text = "No numbers input or invalid input"
-            } else {
-                label.text = returnLargestNumber(array: array)
+            if let array = validateArray(v1: value1) {
+                label.text = returnEvenNumbers(array: array)
             }
+        case .largestNumber:
+            if let array = validateArray(v1: value1) {
+                label.text = returnLargestNumber(array: array)
+            } 
         case .palindrome:
                 label.text = palindrome(value: value1)
         case .primeNumbers:
-            if let v1 = Int(value1) {
-                label.text = primeNumberChecker(value: v1)
-            } else {
-                label.text = "Invalid number"
+            if let v1 = validateInt(v1: value1) {
+                label.text = primeNumberChecker(value: Int(v1))
             }
         }
+    }
+
+    func validateDouble(v1: String) ->Double? {
+        if let v1 = Double(v1) {
+            return v1
+        }
+        label.text = "Invalid number"
+        return nil
+    }
+    func validateInt(v1: String) ->Int? {
+        if let v1 = Int(v1) {
+            return v1
+        }
+        label.text = "Invalid number"
+        return nil
+    }
+    func validateInts(v1: String, v2: String?) ->(Int,Int)? {
+        if let v1 = Int(v1), let temp = v2, let val2 = Int(temp) {
+            return (v1, val2)
+        }
+        label.text = "Invalid number"
+        return nil
+    }
+
+    func validateArray(v1: String) -> [Int]? {
+
+        let array = stringToArrayOfInt(string: v1)
+        if array.count == 0 {
+            label.text = "No numbers input or invalid input"
+            return nil
+        }
+        return array
     }
 }
 
