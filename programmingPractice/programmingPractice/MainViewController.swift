@@ -111,6 +111,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.style = CellStyle.array
         case .palindrome:
             cell.style = CellStyle.textInput
+        case .primeNumbers:
+            cell.style = CellStyle.singleInput
         }
         return cell
     }
@@ -187,6 +189,12 @@ extension MainViewController: CellDelegate {
             }
         case .palindrome:
                 label.text = palindrome(value: value1)
+        case .primeNumbers:
+            if let v1 = Int(value1) {
+                label.text = primeNumberChecker(value: v1)
+            } else {
+                label.text = "Invalid number"
+            }
         }
     }
 }
@@ -200,6 +208,7 @@ enum LearningOperation: Int {
     case evenNumbers
     case largestNumber
     case palindrome
+    case primeNumbers
     
     var sectionTitle: String {
         switch self {
@@ -219,9 +228,11 @@ enum LearningOperation: Int {
             return "Largest number in: "
         case .palindrome:
             return "Palindrome: "
+        case .primeNumbers:
+            return "Prime numbers: "
         }
         
     }
     
-    static var count: Int = 8
+    static var count: Int = 9
 }

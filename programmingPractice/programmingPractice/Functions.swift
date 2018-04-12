@@ -86,3 +86,28 @@ func palindrome(value: String) -> String {
         return (value + " is not a palindrome")
     }
 }
+
+func primeNumberChecker(value: Int) -> String {
+    var isPrime: Bool = true
+    
+    //This does not need to account for 2 because 2 is a prime (see the default value of true for "isPrime")
+    if value == 1 {
+        isPrime = false
+    } else if value > 2 && value % 2 != 0 {
+        for x in stride(from: 3, through: value / 2, by: 2) {
+            if value % x == 0 {
+                isPrime = false
+                break
+            }
+        }
+    } else {
+        isPrime = false
+    }
+    
+    if isPrime {
+        return(String(value) + " is a prime number")
+    } else {
+        return(String(value) + " is not a prime number")
+    }
+
+}
