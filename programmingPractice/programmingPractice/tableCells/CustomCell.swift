@@ -71,6 +71,12 @@ class CustomCell: UITableViewCell {
         case .textInput:
             textField1.placeholder = "Enter text"
             textField1.keyboardType = .default
+        case .singleInputAndArray:
+            textField1.placeholder = "num"
+            textField1.keyboardType = .numberPad
+            textField2.placeholder = "Enter values"
+            textField2.keyboardType = .default
+            label.text = "|"
         }
         
         if style == .doubleInput {
@@ -96,6 +102,30 @@ class CustomCell: UITableViewCell {
                             textField2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
                             textField2.widthAnchor.constraint(equalToConstant: 34),
             ]
+        } else if style == .singleInputAndArray {
+            
+            for view in [textField1, label, textField2, button] as [UIView] {
+                
+                view.translatesAutoresizingMaskIntoConstraints = false
+                contentView.addSubview(view)
+            }
+            
+            constraints += [textField1.topAnchor.constraint(equalTo: contentView.topAnchor),
+                            textField1.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                            textField1.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                            textField1.widthAnchor.constraint(equalToConstant: 36),
+                            
+                            label.topAnchor.constraint(equalTo: topAnchor),
+                            label.leadingAnchor.constraint(equalTo: textField1.trailingAnchor, constant: 4),
+                            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                            label.widthAnchor.constraint(equalToConstant: 18),
+                            
+                            textField2.topAnchor.constraint(equalTo: topAnchor),
+                            textField2.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 4),
+                            textField2.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -32),
+                            textField2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            ]
+            
         } else {
             for view in [textField1, button] as [UIView] {
                 view.translatesAutoresizingMaskIntoConstraints = false
@@ -110,8 +140,8 @@ class CustomCell: UITableViewCell {
         }
         
         constraints += [button.topAnchor.constraint(equalTo: textField1.topAnchor),
-                        button.leadingAnchor.constraint(greaterThanOrEqualTo: textField1.trailingAnchor, constant: 8),
                         button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                        button.widthAnchor.constraint(equalToConstant: 60),
                         button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ]
         
@@ -125,6 +155,7 @@ enum CellStyle {
     case doubleInput
     case textInput
     case array
+    case singleInputAndArray
 }
 
 protocol CellDelegate: class {

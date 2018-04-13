@@ -119,6 +119,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.style = CellStyle.textInput
         case .primeNumbers:
             cell.style = CellStyle.singleInput
+        case .linearSearch:
+            cell.style = CellStyle.singleInputAndArray
         }
         return cell
     }
@@ -185,6 +187,10 @@ extension MainViewController: CellDelegate {
             if let v1 = validateInt(v1: value1) {
                 label.text = primeNumberChecker(value: Int(v1))
             }
+        case .linearSearch:
+            if let v1 = validateInt(v1: value1), let value2 = value2, let array = validateArray(v1: value2) {
+                label.text = linearSearch(arrayToSearch: array, value: v1)
+            }
         }
     }
 
@@ -242,6 +248,7 @@ enum LearningOperation: Int {
     case largestNumber
     case palindrome
     case primeNumbers
+    case linearSearch
     
     var sectionTitle: String {
         switch self {
@@ -263,9 +270,11 @@ enum LearningOperation: Int {
             return "Palindrome: "
         case .primeNumbers:
             return "Prime numbers: "
+        case .linearSearch:
+            return "Linear search: "
         }
         
     }
     
-    static var count: Int = 9
+    static var count: Int = 10
 }
