@@ -113,10 +113,11 @@ func primeNumberChecker(value: Int) -> String {
 }
 
 func linearSearch(arrayToSearch: [Int], value: Int) -> String {
-    //count use a ternary here but best not I suppose
-    if arrayToSearch.contains(value) {
-        return("The array contains " + String(value))
-    } else {
-        return("The array does not contain " + String(value))
+    //could obviously be written using .contains but I suppose we are wanting them to learn to write from scratch to think about the steps involved
+    for x in arrayToSearch {
+        if x == value {
+          return("The array contains " + String(value))
+        }
     }
+    return("The array does not contain " + String(value))
 }
