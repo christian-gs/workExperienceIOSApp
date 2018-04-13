@@ -66,7 +66,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         let textFieldPoint = presentedTextField.convert(CGPoint(x: 0.0, y: textFieldHeight), to: view)
 
         if textFieldPoint.y >= keyboardPoint.y {
-            tableView.contentOffset.y += keyboardFrame.cgRectValue.height
+            let difference = textFieldPoint.y - keyboardPoint.y
+            tableView.contentOffset.y += difference
         }
     }
     
