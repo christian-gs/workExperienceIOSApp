@@ -12,6 +12,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let label = UILabel()
     let tableView = UITableView()
+    var presentedTextField: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.delegate = self
         tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
         tableView.tableFooterView = UIView()
-        
+        tableView.keyboardDismissMode = .onDrag
         
         label.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(label)
@@ -55,20 +56,23 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.removeObserver(self)
     }
     
-    var keyIsBoardVisible = false
-    var keyboardHeight: CGFloat = 0.0
-    
     @objc func keyboardWillShow(_ notification: NSNotification) {
         guard let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
-        self.keyboardHeight = keyboardFrame.cgRectValue.height
-        tableView.contentOffset.y += keyboardHeight
-        self.keyIsBoardVisible = true
+        guard let window = UIApplication.shared.keyWindow else { return }
+        guard let presentedTextField = self.presentedTextField else { return }
+
+        let keyboardPoint = window.convert(keyboardFrame.cgRectValue.origin, to: view)
+        let textFieldHeight = presentedTextField.frame.origin.y + presentedTextField.frame.size.height
+        let textFieldPoint = presentedTextField.convert(CGPoint(x: 0.0, y: textFieldHeight), to: view)
+
+        if textFieldPoint.y >= keyboardPoint.y {
+            let difference = textFieldPoint.y - keyboardPoint.y
+            tableView.contentOffset.y += difference
+        }
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        tableView.contentOffset.y -= self.keyboardHeight
-        self.keyIsBoardVisible = false
-        
+        //tableView.contentOffset.y -= tableView.frame.origin.y
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -93,6 +97,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! CustomCell
         cell.delegate = self
         cell.operation = operation
+        cell.textField1.delegate = self
+        cell.textField2.delegate = self
         
         switch operation {
         case .helloWorld:
@@ -212,6 +218,17 @@ extension MainViewController: CellDelegate {
             return nil
         }
         return array
+    }
+}
+
+extension MainViewController: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.presentedTextField = textField
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        self.presentedTextField = nil
     }
 }
 
