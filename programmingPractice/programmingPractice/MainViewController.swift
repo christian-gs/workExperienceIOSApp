@@ -114,7 +114,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         case .primeNumbers:
             cell.style = CellStyle.singleInput
         case .linearSearch:
-            cell.style = CellStyle.arrayAndSingleInput
+            cell.style = CellStyle.singleInputAndArray
         }
         return cell
     }
@@ -182,8 +182,8 @@ extension MainViewController: CellDelegate {
                 label.text = primeNumberChecker(value: Int(v1))
             }
         case .linearSearch:
-            if let array = validateArray(v1: value1), let value2 = value2, let v2 = validateInt(v1: value2) {
-                label.text = linearSearch(arrayToSearch: array, value: v2)
+            if let v1 = validateInt(v1: value1), let value2 = value2, let array = validateArray(v1: value2) {
+                label.text = linearSearch(arrayToSearch: array, value: v1)
             }
         }
     }
